@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="maria.develop.eiddew.com" id="70b66b01-64bf-466e-b408-5ffbc847829a" port="22" nameFormat="DESCRIPTIVE" username="mariadev" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
