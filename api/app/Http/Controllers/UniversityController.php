@@ -25,7 +25,7 @@ class UniversityController extends Controller
 
     public function index()
     {
-        $universities = University::all();
+        $universities = University::with('departments', 'degrees')->get();
         return response()->json(['universities' => $universities]);
     }
 
@@ -62,7 +62,8 @@ class UniversityController extends Controller
                 'isced_codes' => $request->form['isced_codes'],
                 'years' => $request->form['years'],
                 'languages' => $request->form['languages'],
-                'description' => $request->form['description']
+                'description' => $request->form['description'],
+                'no_required_credits' => $request->form['no_required_credits']
             ]);
         }catch (\Exception $exception) {
             return response()->json(['status' => false, 'message' => $exception->getMessage()]);
@@ -73,7 +74,7 @@ class UniversityController extends Controller
 
     public function show(string $id)
     {
-        $university = University::where('id', $id)->first();
+        $university = University::where('id', $id)->with('departments', 'degrees', 'courses')->first();
         return response()->json(['university' => $university]);
     }
 
@@ -96,6 +97,7 @@ class UniversityController extends Controller
         if(isset($request->years)){$university->years = $request->years;}
         if(isset($request->university_languages)){$university->languages = $request->university_languages;}
         if(isset($request->description)){$university->description = $request->description;}
+        if(isset($request->no_required_credits)){$university->no_required_credits = $request->no_required_credits;}
 
         $university->save();
         return response()->json(['status' => true, 'message' => 'University updated successfully !']);

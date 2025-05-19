@@ -15,8 +15,23 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'family_name',
         'email',
+        'gender',
+        'date_of_birth',
+        'nationality',
+        'country',
+        'address',
+        'city',
+        'postal_code',
+        'phone_number',
         'password',
+        'is_complete',
+        'home_university',
+        'degree',
+        'year',
+        'identity_no',
+        'twofa_secret',
     ];
 
     public function tickets()
@@ -27,6 +42,16 @@ class User extends Authenticatable
     public function applications()
     {
         return $this->hasMany(Application::class, 'user_id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'user_id');
+    }
+
+    public function steps()
+    {
+        return $this->hasMany(Step::class, 'user_id');
     }
 
 

@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('phone');
             $table->text('id_number');
             $table->text('faculty');
-            $table->string('study_cycle');
             $table->string('current_study_year');
             $table->string('education_field');
             $table->float('gpa');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -70,22 +71,64 @@ class ApplicationController extends Controller
 
         try {
             if($language_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/language_certificate.pdf',file_get_contents($language_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/language_certificate.pdf',file_get_contents($language_file));
+                Document::create([
+                    'type' => 'language_certificate',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/language_certificate.pdf',
+                    'feedback' => ''
+                ]);
             }
             if($id_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/id.pdf',file_get_contents($id_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/id.pdf',file_get_contents($id_file));
+                Document::create([
+                    'type' => 'id',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/id.pdf',
+                    'feedback' => ''
+                ]);
             }
             if($cv_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/cv.pdf',file_get_contents($cv_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/cv.pdf',file_get_contents($cv_file));
+                Document::create([
+                    'type' => 'cv',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/cv.pdf',
+                    'feedback' => ''
+                ]);
             }
             if($letter_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/motivation_letter.pdf',file_get_contents($letter_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/motivation_letter.pdf',file_get_contents($letter_file));
+                Document::create([
+                    'type' => 'motivation_letter',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/motivation_letter.pdf',
+                    'feedback' => ''
+                ]);
             }
             if($records_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/transcript_of_records.pdf',file_get_contents($records_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/transcript_of_records.pdf',file_get_contents($records_file));
+                Document::create([
+                    'type' => 'transcript_of_records',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/transcript_of_records.pdf',
+                    'feedback' => ''
+                ]);
             }
             if($diplomas_file !== '') {
-                Storage::disk('public')->put('/applications/'.$user_id.'/'.$application_id.'/other_diplomas.pdf',file_get_contents($diplomas_file));
+                Storage::disk('public')->put('/documents/'.$user_id.'/applications/'.$application_id.'/other_diplomas.pdf',file_get_contents($diplomas_file));
+                Document::create([
+                    'type' => 'other_diplomas',
+                    'user_id' => $user_id,
+                    'status' => 'waiting_for_approval',
+                    'path' => '/documents/'.$user_id.'/'.$application_id.'/other_diplomas.pdf',
+                    'feedback' => ''
+                ]);
             }
         }
         catch (\Exception $exception) {
@@ -119,7 +162,6 @@ class ApplicationController extends Controller
             'phone' => 'required',
             'id_number' => 'required',
             'faculty' => 'required',
-            'study_cycle' => 'required',
             'current_study_year' => 'required',
             'education_field' => 'required',
             'gpa' => 'required',
@@ -146,7 +188,6 @@ class ApplicationController extends Controller
                 'phone' => $request->form['phone'],
                 'id_number' => $request->form['id_number'],
                 'faculty' => $request->form['faculty'],
-                'study_cycle' => $request->form['study_cycle'],
                 'current_study_year' => $request->form['current_study_year'],
                 'education_field' => $request->form['education_field'],
                 'gpa' => $request->form['gpa'],
@@ -156,6 +197,7 @@ class ApplicationController extends Controller
                 'mobility_start_date' => $request->form['mobility_start_date'],
                 'mobility_end_date' => $request->form['mobility_end_date'],
                 'destination_type' => $request->form['destination_type'],
+                'home_university' => $request->form['home_university'],
                 'destination_1' => $request->form['destination_1'],
                 'destination_2' => $request->form['destination_2'],
                 'destination_3' => $request->form['destination_3'],
@@ -211,6 +253,7 @@ class ApplicationController extends Controller
         if(isset($request->destination_2)){$application->destination_2 = $request->destination_2;}
         if(isset($request->destination_3)){$application->destination_3 = $request->destination_3;}
         if(isset($request->placement_country)){$application->placement_country = $request->placement_country;}
+        if(isset($request->home_university)){$application->home_university = $request->home_university;}
 
         $application->save();
         return response()->json(['status' => true, 'message' => 'Application updated successfully !']);
